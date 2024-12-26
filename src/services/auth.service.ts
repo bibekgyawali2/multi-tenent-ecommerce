@@ -2,6 +2,7 @@ import { Body, Post, Route, SuccessResponse, Tags } from "tsoa";
 import AppDataSource from "../config/database.config";
 import HttpException from "../utils/HttpException";
 import User from "../entities/user.entity";
+import Store from "../entities/store.entity";
 import { SignUpDTO } from "../dtos/auth.dto";
 import { SignInDTO } from "../dtos/auth.dto";
 import BcryptService from "./utils/bcrypt.service";
@@ -10,10 +11,16 @@ import messages from "../constants/messages";
 
 
 class AuthService {
-    constructor(private userRepository = AppDataSource.getRepository(User)) { }
+    constructor(private userRepository = AppDataSource.getRepository(User),
+        private shopRepository = AppDataSource.getRepository(Store)
+    ) { }
 
     async signUp(@Body() userData: SignUpDTO): Promise<User> {
-        const { email, password, phone, name, } = userData;
+        const { email, password, phone, name } = userData;
+        // const shopExists = await this.shopRepository.findOne({ where: { id: shopId } });
+        // if (!shopExists) {
+        //     throw HttpException.notFound("Shop not found");
+        // }
         const isExists = await this.userRepository.findOne({
             where: {
                 email,

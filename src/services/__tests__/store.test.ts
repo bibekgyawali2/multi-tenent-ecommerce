@@ -1,8 +1,9 @@
 import axios from "axios";
+import Env from "../../config/env";
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = Env.BASE_URL;
 
-const generateRandom3Chars = () => {
+export const generateRandom3Chars = () => {
     return Math.random().toString(36).substring(2, 5);
 };
 
@@ -22,7 +23,6 @@ describe("Store Service", () => {
 
             });
 
-            console.log(response.data);
             expect(response.status).toBe(201);
         } catch (e: any) {
             console.error('Test failed:', e.response?.data);

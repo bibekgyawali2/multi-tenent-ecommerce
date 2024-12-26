@@ -12,7 +12,7 @@ const messages = {
   dataInserted: "Data Inserted Successfully",
   dataDeleted: "Data Deleted Successfully",
   adminCreated: "Admin Created Successfully",
-  userCreated:"User Created Successfully",
+  userCreated: "User Created Successfully",
   passwordStrength:
     "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number and one special character",
   invalidAuth: "Invalid email or password",

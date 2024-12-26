@@ -60,7 +60,7 @@ class Product extends CommonEntity {
 
     @ManyToOne(() => Store, (store) => store.products, {
         onDelete: "CASCADE",
-        nullable: false // Makes store relationship required
+        nullable: false
     })
     store!: Store;
 }

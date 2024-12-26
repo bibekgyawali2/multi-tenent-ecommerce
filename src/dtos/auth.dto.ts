@@ -11,7 +11,6 @@ export class SignUpDTO {
   @IsNotEmpty()
   name: string;
 
-
   @IsEmail()
   @IsString()
   @IsNotEmpty()
@@ -22,9 +21,7 @@ export class SignUpDTO {
   @IsOptional()
   phone: string;
 
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: "password is  too weak",
-  })
+
   @IsString()
   @IsNotEmpty()
   password: string;

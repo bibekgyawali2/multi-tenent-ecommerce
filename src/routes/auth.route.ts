@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/catchAsync";
 import Validate from "../middlewares/validation.middleware";
 import { SignInDTO } from "../dtos/auth.dto";
 import { SignUpDTO } from "../dtos/auth.dto";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const authController = new AuthController();
 
@@ -21,6 +22,7 @@ class AuthRoutes {
         );
         this.router.post(
             "/signup",
+            authMiddleware.getMiddleware(),
             Validate(SignUpDTO),
             catchAsync(authController.signUp.bind(authController))
         );

@@ -37,17 +37,10 @@ class StoreService {
             throw HttpException.badRequest("All fields are required");
         }
 
-        const hashedPassword = await BcryptService.hash(password)
+        const hashedPassword = await BcryptService.hash(password);
 
-        const user = this.userRepository.create({
-            email,
-            name,
-            password: hashedPassword,
-            phone: contactNumber,
-            roles: ["owner"],
-        });
-        const savedUser = await this.userRepository.save(user);
         const domainName = subdomainNameGenerator(storeName);
+
         const store = this.storeRepository.create({
             storeName,
             businessCategory,
@@ -56,9 +49,23 @@ class StoreService {
             contactEmailAddress,
             subdomain: domainName,
         });
+
         const savedStore = await this.storeRepository.save(store);
+
+        const user = this.userRepository.create({
+            email,
+            name,
+            password: hashedPassword,
+            phone: contactNumber,
+            roles: "admin",
+            store: savedStore,
+        });
+
+        const savedUser = await this.userRepository.save(user);
+
         return { user: savedUser, store: savedStore };
     }
+
 }
 
 export default StoreService;

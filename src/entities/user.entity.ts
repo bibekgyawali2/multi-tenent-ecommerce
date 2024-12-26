@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import CommonEntity from "./common.entity";
 import Store from "./store.entity";
 
@@ -33,13 +33,16 @@ class User extends CommonEntity {
 
     @Column({
         name: "roles",
-        type: "simple-array",
+        type: "simple-enum",
         default: "admin",
+        enum: ["admin", "manager"],
     })
-    roles!: string[];
+    roles!: string;
 
-    @OneToMany(() => Store, (store) => store.owner)
-    stores!: Store[];
+    @ManyToOne(() => Store, (store) => store.users, {
+        onDelete: "CASCADE",
+    })
+    store!: Store;
 }
 
 export default User;

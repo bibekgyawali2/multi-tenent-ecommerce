@@ -18,18 +18,18 @@ const routes = [
   }
 ];
 
-// Subdomain check middleware
-const subdomainCheck = (req: any, res: any, next: any) => {
-  const hostname = req.hostname;
-  if (hostname === domainConfig.baseDomain) {
-    next();
-  } else {
-    storefrontRouter(req, res, next);
-  }
-};
+// // Subdomain check middleware
+// const subdomainCheck = (req: any, res: any, next: any) => {
+//   const hostname = req.hostname;
+//   if (hostname === domainConfig.baseDomain) {
+//     next();
+//   } else {
+//     storefrontRouter(req, res, next);
+//   }
+// };
 
 
-router.use(subdomainCheck);
+// router.use(subdomainCheck);
 
 
 // *Route to ensure that server is currently running

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import CommonEntity from "./common.entity";
 import User from "./user.entity";
 import Product from "./products.entity";
@@ -44,10 +44,8 @@ class Store extends CommonEntity {
     })
     subdomain!: string;
 
-    @ManyToOne(() => User, (user) => user.stores, {
-        onDelete: "CASCADE",
-    })
-    owner!: User;
+    @OneToMany(() => User, (user) => user.store)
+    users!: User[];
 
     @OneToMany(() => Product, (product) => product.store)
     products?: Product[];
