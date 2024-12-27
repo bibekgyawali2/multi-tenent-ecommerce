@@ -28,7 +28,10 @@ class AuthMiddleware {
         const verified = this.parseToken(token);
         req.user = { id: verified.id, ...verified }; // Include user id from token.
     }
-
+    private getShopIdFromToken(token: string): string {
+        const verified = this.parseToken(token);
+        return verified.shopId;
+    }
     private authMiddleware(req: Request, res: Response, next: NextFunction): void {
         const authHeader = req.header("Authorization");
         const token = this.extractToken(authHeader);

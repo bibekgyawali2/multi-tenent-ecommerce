@@ -16,6 +16,7 @@ class AuthService {
     ) { }
 
     async signUp(@Body() userData: SignUpDTO): Promise<User> {
+        console.log(":::::::::::::::::::::::::::::::::::::::")
         const { email, password, phone, name } = userData;
         // const shopExists = await this.shopRepository.findOne({ where: { id: shopId } });
         // if (!shopExists) {

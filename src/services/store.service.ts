@@ -20,6 +20,7 @@ class StoreService {
     }
 
     async createStore(@Body() storeData: createStoreDTO): Promise<{ user: User; store: Store }> {
+        console.log(":::::::::::::::::::::::::::::::::::::::")
         const { storeName, businessCategory, contactNumber, storeAddress, contactEmailAddress } = storeData;
         const { name, email, password } = storeData;
 

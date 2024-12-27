@@ -37,7 +37,5 @@ export class CreateProductDTO {
     @IsOptional()
     categoryId: string;
 
-    @IsUUID()
-    @IsNotEmpty()
-    storeId: string;
+
 }

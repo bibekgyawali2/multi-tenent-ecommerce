@@ -5,6 +5,7 @@ import HttpException from "../utils/HttpException";
 import { Body } from "tsoa";
 import { createCategoryDTO } from "../dtos/categories.dto";
 import Store from "../entities/store.entity";
+import getStoreIdFromUserId from "./getShopIdFromUserId";
 
 class CategoryService {
     private categoryRepository: Repository<Category>;
@@ -15,8 +16,10 @@ class CategoryService {
         this.storeRepository = AppDataSource.getRepository(Store);
     }
 
-    async createCategory(@Body() categoryData: createCategoryDTO): Promise<Category> {
-        const { categoryName, categoryDescription, categoryImage, storeId } = categoryData;
+    async createCategory(@Body() categoryData: createCategoryDTO, userId: string): Promise<Category> {
+        const { categoryName, categoryDescription, categoryImage } = categoryData;
+
+        const storeId = await getStoreIdFromUserId.getShopId(userId);
 
         const store = await this.storeRepository.findOne({
             where: { id: storeId },

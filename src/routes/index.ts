@@ -5,6 +5,8 @@ import { domainConfig } from "../config/domain.config";
 import storefrontRouter from "./storefront.route";
 import path from "path";
 import authRouter from "./auth.route";
+import categoryRouter from "./category.route";
+import productRouter from "./product.route";
 
 const router = Router();
 const routes = [
@@ -15,6 +17,14 @@ const routes = [
   {
     path: "/auth",
     route: authRouter
+  },
+  {
+    path: "/category",
+    route: categoryRouter
+  },
+  {
+    path: "/product",
+    route: productRouter,
   }
 ];
 
@@ -43,10 +53,8 @@ router.get("/", (req, res) => {
   });
 });
 
-// *Instantiate all the routes
 routes.forEach((route) => {
-  router.use("/store", route.route());
-  router.use("/auth", route.route());
+  router.use(route.path, route.route());
 });
 
 

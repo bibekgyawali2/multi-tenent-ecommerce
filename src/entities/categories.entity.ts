@@ -22,7 +22,7 @@ class Category {
     @Column({
         name: "category_image",
     })
-    categoryImage!: string;
+    categoryImage?: string;
 
     @ManyToOne(() => Store, (store) => store.categories, {
         onDelete: "CASCADE",

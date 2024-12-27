@@ -5,6 +5,7 @@ import Category from "../entities/categories.entity";
 import Store from "../entities/store.entity";
 import HttpException from "../utils/HttpException";
 import { CreateProductDTO } from "../dtos/product.dto";
+import getShopIdFromUserId from "./getShopIdFromUserId";
 
 class ProductService {
     private productRepository: Repository<Product>;
@@ -17,7 +18,7 @@ class ProductService {
         this.storeRepository = AppDataSource.getRepository(Store);
     }
 
-    async createProduct(productData: CreateProductDTO): Promise<Product> {
+    async createProduct(productData: CreateProductDTO, userId: string): Promise<Product> {
         const {
             productName,
             productDescription,
@@ -28,11 +29,12 @@ class ProductService {
             status,
             product_sku,
             categoryId,
-            storeId,
         } = productData;
 
         const category = await this.categoryRepository.findOne({ where: { id: categoryId } });
         if (!category) throw HttpException.notFound("Category not found");
+
+        const storeId = await getShopIdFromUserId.getShopId(userId);
 
         const store = await this.storeRepository.findOne({ where: { id: storeId } });
         if (!store) throw HttpException.notFound("Store not found");

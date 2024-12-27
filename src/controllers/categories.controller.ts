@@ -8,10 +8,10 @@ class CategoryController {
         private categoryService: CategoryService = new CategoryService(),
     ) { }
 
-    // Create a new category
     async createCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const category = await this.categoryService.createCategory(req.body);
+            console.log(":::::::::::::::::::DEBUG::::::::::::::::::::");
+            const category = await this.categoryService.createCategory(req.body, req.user.id);
             res.status(StatusCodes.CREATED).json({
                 success: true,
                 message: messages["actionCompleted"],
@@ -22,7 +22,6 @@ class CategoryController {
         }
     }
 
-    // Get all categories
     async getAllCategories(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const categories = await this.categoryService.getAllCategories();
@@ -36,7 +35,6 @@ class CategoryController {
         }
     }
 
-    // Get a category by ID
     async getCategoryById(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id } = req.params;
@@ -51,7 +49,6 @@ class CategoryController {
         }
     }
 
-    // Update a category
     async updateCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id } = req.params;
@@ -66,7 +63,6 @@ class CategoryController {
         }
     }
 
-    // Delete a category
     async deleteCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id } = req.params;

@@ -10,10 +10,6 @@ export class createCategoryDTO {
     categoryDescription?: string;
 
     @IsString()
-    @IsNotEmpty()
-    categoryImage: string;
-
-    @IsUUID()
-    @IsNotEmpty()
-    storeId: string;
+    @IsOptional()
+    categoryImage?: string;
 }

@@ -9,7 +9,7 @@ class ProductController {
     // Create a new product
     async createProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const product = await this.productService.createProduct(req.body);
+            const product = await this.productService.createProduct(req.body, req.user.id);
             res.status(StatusCodes.CREATED).json({
                 success: true,
                 message: messages["actionCompleted"],

@@ -24,7 +24,7 @@ class ProductRoutes {
         );
 
         this.router.post(
-            "/create-product",
+            "/create",
             authMiddleware.getMiddleware(),
             Validate(CreateProductDTO),
             catchAsync(productController.createProduct.bind(productController))
