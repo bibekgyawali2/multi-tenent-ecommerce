@@ -17,9 +17,8 @@ class ProductRoutes {
     }
     routes() {
 
-        this.router.post(
+        this.router.get(
             "/",
-            Validate(SignUpDTO),
             catchAsync(productController.getAllProducts.bind(productController))
         );
 

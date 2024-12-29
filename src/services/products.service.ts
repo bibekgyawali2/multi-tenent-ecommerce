@@ -5,7 +5,7 @@ import Category from "../entities/categories.entity";
 import Store from "../entities/store.entity";
 import HttpException from "../utils/HttpException";
 import { CreateProductDTO } from "../dtos/product.dto";
-import getShopIdFromUserId from "./getShopIdFromUserId";
+import getShopIdFromUserId from "./utils/getShopIdFromUserId";
 
 class ProductService {
     private productRepository: Repository<Product>;

@@ -5,7 +5,7 @@ import HttpException from "../utils/HttpException";
 import { Body } from "tsoa";
 import { createCategoryDTO } from "../dtos/categories.dto";
 import Store from "../entities/store.entity";
-import getStoreIdFromUserId from "./getShopIdFromUserId";
+import getStoreIdFromUserId from "./utils/getShopIdFromUserId";
 
 class CategoryService {
     private categoryRepository: Repository<Category>;

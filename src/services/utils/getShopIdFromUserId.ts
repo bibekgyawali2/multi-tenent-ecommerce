@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
-import AppDataSource from "../config/database.config";
-import User from "../entities/user.entity";
-import HttpException from "../utils/HttpException";
+import AppDataSource from "../../config/database.config";
+import User from "../../entities/user.entity";
+import HttpException from "../../utils/HttpException";
 
 class GetStoreIdFromUserId {
     private userRepository: Repository<User>;

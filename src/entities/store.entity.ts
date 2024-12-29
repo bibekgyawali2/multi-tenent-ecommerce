@@ -3,6 +3,7 @@ import CommonEntity from "./common.entity";
 import User from "./user.entity";
 import Product from "./products.entity";
 import Category from "./categories.entity";
+import Order from "./order.entity";
 
 @Entity({
     name: "store",
@@ -52,6 +53,9 @@ class Store extends CommonEntity {
 
     @OneToMany(() => Category, (category) => category.store)
     categories?: Category[];
+
+    @OneToMany(() => Order, (order) => order.store)
+    orders?: Order[];
 }
 
 export default Store;
