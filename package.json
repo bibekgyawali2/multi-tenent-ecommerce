@@ -12,7 +12,8 @@
     "start:dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "rimraf ./build && tsc ",
     "dev": "nodemon ./src/index.ts",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:e2e": "jest .src/services/__tests__/e2e.test.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

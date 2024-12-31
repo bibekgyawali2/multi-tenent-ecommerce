@@ -3,13 +3,14 @@ import Env from "../../config/env";
 import { generateRandom3Chars } from "./store.test";
 
 const BACKEND_URL = Env.BASE_URL;
+const BACKEND_DOMAIN = Env.BASE_DOMAIN;
 
 describe("E2E Service Tests", () => {
     let token: string;
     let storeData: any;
     let categoryId: string;
     let storeCreated = false;
-
+    let subdomain: string;
 
     const randomChars = generateRandom3Chars();
     const storeEmail = `test-store-${randomChars}@test.com`;
@@ -46,6 +47,7 @@ describe("E2E Service Tests", () => {
                 expect(response.status).toBe(201);
                 expect(response.data).toHaveProperty("success", true);
                 expect(response.data.data).toHaveProperty("store");
+                subdomain = response.data.data.store.store.subdomain;
                 storeCreated = true;
             } catch (e: any) {
                 console.error("Store creation failed:", e.response?.data);
@@ -97,6 +99,22 @@ describe("E2E Service Tests", () => {
                 throw e;
             }
         });
+        test("should fetch category", async () => {
+            try {
+                console.log("Subdomain:", subdomain);
+                const response = await axios.get(`http://${subdomain}.${BACKEND_DOMAIN}:3000/api/category`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                expect(response.status).toBe(200);
+            } catch (e: any) {
+                console.log("Category fetch failed:", e);
+                throw e;
+            }
+        });
+
     });
 
     describe("Product Flow", () => {
