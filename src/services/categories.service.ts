@@ -6,6 +6,7 @@ import { Body } from "tsoa";
 import { createCategoryDTO } from "../dtos/categories.dto";
 import Store from "../entities/store.entity";
 import getStoreIdFromUserId from "./utils/getShopIdFromUserId";
+import { log } from "console";
 
 class CategoryService {
     private categoryRepository: Repository<Category>;
@@ -17,6 +18,7 @@ class CategoryService {
     }
 
     async createCategory(@Body() categoryData: createCategoryDTO, userId: string): Promise<Category> {
+        console.log('Category data:', userId);
         const { categoryName, categoryDescription, categoryImage } = categoryData;
 
         const storeId = await getStoreIdFromUserId.getShopId(userId);
@@ -43,6 +45,33 @@ class CategoryService {
         return await this.categoryRepository.find({
             relations: ["store"],
         });
+    }
+
+    async getCategoriesByStoreId(storeId: string): Promise<Category[]> {
+
+        const store = await this.storeRepository.findOne({
+            where: { id: storeId }
+        });
+
+        if (!store) {
+            throw HttpException.notFound(`Store with ID ${storeId} not found`);
+        }
+
+        console.log('Store found:', store);
+
+        const categories = await this.categoryRepository.find({
+            where: {
+                store: {
+                    id: storeId
+                }
+            },
+            relations: ['store']
+        });
+
+        console.log('Categories found:', categories);
+        console.log('Store ID used in query:', storeId);
+
+        return categories;
     }
 
     async getCategoryById(id: string): Promise<Category> {

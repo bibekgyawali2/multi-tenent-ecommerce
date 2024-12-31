@@ -7,6 +7,7 @@ import { SignUpDTO } from "../dtos/auth.dto";
 import { SignInDTO } from "../dtos/auth.dto";
 import BcryptService from "./utils/bcrypt.service";
 import messages from "../constants/messages";
+import getStoreIdFromUserId from "./utils/getShopIdFromUserId";
 
 
 
@@ -15,13 +16,14 @@ class AuthService {
         private shopRepository = AppDataSource.getRepository(Store)
     ) { }
 
-    async signUp(@Body() userData: SignUpDTO): Promise<User> {
-        console.log(":::::::::::::::::::::::::::::::::::::::")
+    async signUp(@Body() userData: SignUpDTO, userId: string): Promise<User> {
+
+        const storeId = await getStoreIdFromUserId.getShopId(userId);
         const { email, password, phone, name } = userData;
-        // const shopExists = await this.shopRepository.findOne({ where: { id: shopId } });
-        // if (!shopExists) {
-        //     throw HttpException.notFound("Shop not found");
-        // }
+        const shopExists = await this.shopRepository.findOne({ where: { id: storeId } });
+        if (!shopExists) {
+            throw HttpException.notFound("Shop not found");
+        }
         const isExists = await this.userRepository.findOne({
             where: {
                 email,
@@ -35,7 +37,8 @@ class AuthService {
             email,
             phone,
             name,
-            password: hashedPassword
+            password: hashedPassword,
+            store: shopExists,
         });
         return await this.userRepository.save(user);
     }

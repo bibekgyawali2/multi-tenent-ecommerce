@@ -17,7 +17,7 @@ export const subdomainMiddleware = async (req: Request, res: Response, next: Nex
             const storeRepository = AppDataSource.getRepository(Store);
             const store = await storeRepository.findOne({
                 where: { subdomain },
-                relations: ['owner']
+                // relations: ['owner']
             });
             if (store) {
                 (req as any).store = store;

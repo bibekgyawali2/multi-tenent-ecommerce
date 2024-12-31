@@ -10,12 +10,24 @@ class CategoryController {
 
     async createCategory(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            console.log(":::::::::::::::::::DEBUG::::::::::::::::::::");
             const category = await this.categoryService.createCategory(req.body, req.user.id);
             res.status(StatusCodes.CREATED).json({
                 success: true,
                 message: messages["actionCompleted"],
                 data: { category },
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getCategoriesByStore(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const categories = await this.categoryService.getCategoriesByStoreId(req.storeId!);
+            res.status(StatusCodes.SUCCESS).json({
+                success: true,
+                message: messages["actionCompleted"],
+                data: { categories },
             });
         } catch (error) {
             next(error);

@@ -23,7 +23,7 @@ class ProductController {
     // Get all products
     async getAllProducts(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const products = await this.productService.getAllProducts();
+            const products = await this.productService.getProductsByStore(req.storeId!);
             res.status(StatusCodes.SUCCESS).json({
                 success: true,
                 message: messages["actionCompleted"],

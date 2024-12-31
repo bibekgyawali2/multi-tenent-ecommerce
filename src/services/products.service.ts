@@ -68,6 +68,14 @@ class ProductService {
         return product;
     }
 
+    async getProductsByStore(storeId: string): Promise<Product[]> {
+        console.log(storeId);
+        return await this.productRepository.find({
+            where: { store: { id: storeId } },
+            relations: ["category", "store"],
+        });
+    }
+
     async updateProduct(id: string, productData: Partial<CreateProductDTO>): Promise<Product> {
         const product = await this.getProductById(id);
 

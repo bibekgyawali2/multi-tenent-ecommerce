@@ -4,8 +4,11 @@ import Validate from "../middlewares/validation.middleware";
 import authMiddleware from "../middlewares/auth.middleware";
 import { createCategoryDTO } from "../dtos/categories.dto";
 import CategoryController from "../controllers/categories.controller";
+import SubdomainResolver from "../middlewares/subDomainResolver.middleware";
+import Env from "../config/env";
 
 const categoryController = new CategoryController();
+const subdomainResolver = new SubdomainResolver(Env.BASE_DOMAIN);
 
 class CategoryRoutes {
     router: Router;
@@ -16,7 +19,8 @@ class CategoryRoutes {
     routes() {
         this.router.get(
             "/",
-            catchAsync(categoryController.getAllCategories.bind(categoryController))
+            subdomainResolver.resolve.bind(subdomainResolver),
+            catchAsync(categoryController.getCategoriesByStore.bind(categoryController))
         );
 
         this.router.post(

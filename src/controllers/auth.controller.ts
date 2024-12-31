@@ -10,7 +10,7 @@ class AuthController {
 
     async signUp(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await this.authService.signUp(req.body);
+            const user = await this.authService.signUp(req.body, req.user.id);
             res.status(StatusCodes.CREATED).json({
                 success: true,
                 message: messages["userCreated"],

@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import Validate from "../middlewares/validation.middleware";
-import { SignInDTO } from "../dtos/auth.dto";
-import { SignUpDTO } from "../dtos/auth.dto";
 import ProductController from "../controllers/products.controller";
 import { CreateProductDTO } from "../dtos/product.dto";
 import authMiddleware from "../middlewares/auth.middleware";
+import SubdomainResolver from "../middlewares/subDomainResolver.middleware";
+import Env from "../config/env";
 
 const productController = new ProductController();
-
+const subdomainResolver = new SubdomainResolver(Env.BASE_DOMAIN);
 class ProductRoutes {
     router: Router;
     constructor() {
@@ -19,6 +19,7 @@ class ProductRoutes {
 
         this.router.get(
             "/",
+            subdomainResolver.resolve.bind(subdomainResolver),
             catchAsync(productController.getAllProducts.bind(productController))
         );
 
