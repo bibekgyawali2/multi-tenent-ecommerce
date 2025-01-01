@@ -37,5 +37,4 @@ export class CreateProductDTO {
     @IsOptional()
     categoryId: string;
 
-
 }

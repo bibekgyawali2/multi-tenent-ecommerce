@@ -49,20 +49,20 @@ class ProductController {
         }
     }
 
-    // Update a product
-    async updateProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const { id } = req.params;
-            const product = await this.productService.updateProduct(id, req.body);
-            res.status(StatusCodes.SUCCESS).json({
-                success: true,
-                message: messages["actionCompleted"],
-                data: { product },
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
+    // // Update a product
+    // async updateProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
+    //     try {
+    //         const { id } = req.params;
+    //         const product = await this.productService.updateProduct(id, req.body);
+    //         res.status(StatusCodes.SUCCESS).json({
+    //             success: true,
+    //             message: messages["actionCompleted"],
+    //             data: { product },
+    //         });
+    //     } catch (error) {
+    //         next(error);
+    //     }
+    // }
 
     // Delete a product
     async deleteProduct(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -22,13 +22,9 @@ describe("E2E Service Tests", () => {
         console.log("Starting E2E Tests...");
     });
 
-    afterAll(() => {
-        console.log("E2E Tests Completed.");
-    });
-
     describe("Store and Auth Flow", () => {
         test("should create a store", async () => {
-            if (storeCreated) return;  // Skip store creation if it's already done
+            if (storeCreated) return; // Skip store creation if it's already done
 
             try {
                 const response = await axios.post(`${BACKEND_URL}/api/store/create`, {
@@ -99,14 +95,18 @@ describe("E2E Service Tests", () => {
                 throw e;
             }
         });
+
         test("should fetch category", async () => {
             try {
                 console.log("Subdomain:", subdomain);
-                const response = await axios.get(`http://${subdomain}.${BACKEND_DOMAIN}:3000/api/category`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await axios.get(
+                    `http://${subdomain}.${BACKEND_DOMAIN}:3000/api/category`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
 
                 expect(response.status).toBe(200);
             } catch (e: any) {
@@ -114,7 +114,6 @@ describe("E2E Service Tests", () => {
                 throw e;
             }
         });
-
     });
 
     describe("Product Flow", () => {
@@ -174,9 +173,67 @@ describe("E2E Service Tests", () => {
                 expect(response.data).toHaveProperty("success", true);
                 expect(response.data.data.product.category.id).toBe(categoryId);
             } catch (e: any) {
-                console.error("Product creation with category failed:", e.response?.data);
+                console.error(
+                    "Product creation with category failed:",
+                    e.response?.data
+                );
+                throw e;
+            }
+        });
+    });
+
+    describe("Order Flow", () => {
+        test("should create an order", async () => {
+            try {
+                const response = await axios.post(
+                    `http://${subdomain}.${BACKEND_DOMAIN}:3000/api/order/create`,
+                    {
+                        // Required fields based on CreateOrderDTO
+                        orderDate: new Date().toISOString(),
+                        customerName: "John Doe",
+                        customerEmail: "john@example.com",
+                        customerPhone: "+2341234567890",
+                        shippingAddress: "123 Main Street",
+                        shippingCity: "Lagos",
+                        shippingRegion: "Lagos", // Optional
+                        shippingCountry: "Nigeria",
+                        shippingPostalCode: "100001", // Optional
+                        paymentMethod: "card",
+                        paymentStatus: "paid",
+                        paymentDate: new Date().toISOString(),
+                        paymentAmount: 1000.00,
+                        orderItems: [
+                            {
+                                productId: "1",
+                                quantity: 2
+                            }
+                        ]
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                // Assertions
+                expect(response.status).toBe(201);
+                expect(response.data).toHaveProperty("success", true);
+                expect(response.data.data).toHaveProperty("order");
+                expect(response.data.data.order).toHaveProperty("orderItems");
+
+                // Additional assertions to validate required fields
+                const order = response.data.data.order;
+                expect(order).toHaveProperty("customerName");
+                expect(order).toHaveProperty("customerEmail");
+                expect(order).toHaveProperty("customerPhone");
+                expect(order.orderItems).toBeInstanceOf(Array);
+                expect(order.orderItems.length).toBeGreaterThan(0);
+            } catch (e: any) {
+                console.error("Order creation failed:", e.response?.data);
                 throw e;
             }
         });
     });
 });
+

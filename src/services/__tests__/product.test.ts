@@ -81,7 +81,6 @@ describe("Product Service", () => {
                     crossedPrice: 1200,
                     productImage: "https://via.placeholder.com/150",
 
-
                 },
                 {
                     headers: {

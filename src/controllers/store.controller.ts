@@ -11,7 +11,6 @@ class StoreController {
     ) { }
 
     async createStore(req: Request, res: Response, next: NextFunction): Promise<void> {
-        console.log(":::::::::::::::::::DEBUG::::::::::::::::::::");
         try {
             const store = await this.storeService.createStore(req.body);
             res.status(StatusCodes.CREATED).json({

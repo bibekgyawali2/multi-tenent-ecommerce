@@ -1,8 +1,9 @@
-import { IsString, IsNotEmpty, IsOptional, IsArray, ValidateNested, IsNumber } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsArray, ValidateNested, IsNumber, isUUID, IsUUID } from "class-validator";
 import { Type } from "class-transformer";
+import { UUID } from "typeorm/driver/mongodb/bson.typings";
 
 class OrderItemDTO {
-    @IsString()
+    @IsUUID()
     @IsNotEmpty()
     productId: string;
 
@@ -12,9 +13,6 @@ class OrderItemDTO {
 
 export class CreateOrderDTO {
 
-    @IsNotEmpty()
-    @IsString()
-    storeId: string;
 
     @IsString()
     @IsNotEmpty()

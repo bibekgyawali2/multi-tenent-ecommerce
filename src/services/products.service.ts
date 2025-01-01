@@ -69,27 +69,26 @@ class ProductService {
     }
 
     async getProductsByStore(storeId: string): Promise<Product[]> {
-        console.log(storeId);
         return await this.productRepository.find({
             where: { store: { id: storeId } },
             relations: ["category", "store"],
         });
     }
 
-    async updateProduct(id: string, productData: Partial<CreateProductDTO>): Promise<Product> {
-        const product = await this.getProductById(id);
+    // async updateProduct(id: string, productData: Partial<CreateProductDTO>): Promise<Product> {
+    //     const product = await this.getProductById(id);
 
-        if (productData.productName) product.productName = productData.productName;
-        if (productData.productDescription !== undefined) product.productDescription = productData.productDescription;
-        if (productData.productImage) product.productImage = productData.productImage;
-        if (productData.price !== undefined) product.productPrice = productData.price;
-        if (productData.crossedPrice !== undefined) product.crossedPrice = productData.crossedPrice;
-        if (productData.productStock !== undefined) product.productStock = productData.productStock;
-        if (productData.status) product.status = productData.status;
-        if (productData.product_sku) product.product_sku = productData.product_sku;
+    //     if (productData.productName) product.productName = productData.productName;
+    //     if (productData.productDescription !== undefined) product.productDescription = productData.productDescription;
+    //     if (productData.productImage) product.productImage = productData.productImage;
+    //     if (productData.price !== undefined) product.productPrice = productData.price;
+    //     if (productData.crossedPrice !== undefined) product.crossedPrice = productData.crossedPrice;
+    //     if (productData.productStock !== undefined) product.productStock = productData.productStock;
+    //     if (productData.status) product.status = productData.status;
+    //     if (productData.product_sku) product.product_sku = productData.product_sku;
 
-        return await this.productRepository.save(product);
-    }
+    //     return await this.productRepository.save(product);
+    // }
 
     async deleteProduct(id: string): Promise<void> {
         const product = await this.getProductById(id);
