@@ -54,7 +54,7 @@ class Store extends CommonEntity {
     @OneToMany(() => Category, (category) => category.store)
     categories?: Category[];
 
-    @OneToMany(() => Order, (order) => order.store)
+    @OneToMany(() => Order, (order) => order.storeId)
     orders?: Order[];
 }
 

@@ -1,7 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
 import Store from "./store.entity";
+import OrderItem from "./order-item.entity";
 
-@Entity()
+@Entity({
+    name: "orders"
+})
 class Order {
     @PrimaryGeneratedColumn("uuid")
     id: string;
@@ -98,17 +101,16 @@ class Order {
     })
     paymentAmount?: number;
 
-    @Column({
-        name: "order_items",
-        type: "json",
+    @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
+        cascade: true
     })
-    orderItems!: Array<{ productId: string; quantity: number }>;
+    orderItems!: OrderItem[];
 
-    @ManyToOne(() => Store, (store) => store.products, {
+    @ManyToOne(() => Store, (store) => store.orders, {
         onDelete: "CASCADE",
         nullable: false
     })
-    store!: Store;
+    storeId!: string;
 }
 
 export default Order;

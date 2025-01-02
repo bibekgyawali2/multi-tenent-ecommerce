@@ -40,27 +40,26 @@ class OrderService {
                     paymentAmount: typeof orderData.paymentAmount === 'string' ?
                         parseFloat(orderData.paymentAmount) :
                         orderData.paymentAmount,
-                    store: { id: storeId },
+                    storeId: storeId,
                 };
-
                 const order = await transactionalEntityManager.save(Order, orderEntity);
-
                 // Process order items
                 const orderItemPromises = orderData.orderItems.map(async (item) => {
                     // Find the product
                     const product = await transactionalEntityManager.findOne(Product, {
-                        where: { id: item.productId }
+                        where: { id: item.productId },
+                        relations: ['store']
                     });
-
                     if (!product) {
                         throw HttpException.notFound(`Product with ID ${item.productId} not found`);
                     }
-
                     // Check if product belongs to the store
+                    console.log(product.store.id);
+                    console.log(storeId);
                     if (product.store.id !== storeId) {
                         throw HttpException.forbidden(`Product ${item.productId} does not belong to this store`);
                     }
-
+                    console.log(":::::::::::::::::::DEBUG::::::::::::::::::::::::::");
                     // // Check stock availability
                     // if (product.productStock < item.quantity) {
                     //     throw HttpException.badRequest(`Insufficient stock for product ${product.productName}`);
@@ -72,7 +71,7 @@ class OrderService {
                         product,
                         quantity: item.quantity
                     });
-
+                    console.log(":::::::::::::::::::DEBUG::::::::::::::::::::::::::");
                     // Update product stock
                     // product.productStock -= item.quantity;
                     await transactionalEntityManager.save(Product, product);
@@ -100,7 +99,7 @@ class OrderService {
     async getAllOrders(storeId: string): Promise<Order[]> {
         try {
             return await this.orderRepository.find({
-                where: { store: { id: storeId } },
+                where: { storeId: storeId },
                 relations: ['orderItems', 'orderItems.product'],
                 order: { orderDate: 'DESC' }
             });
@@ -113,7 +112,7 @@ class OrderService {
     async getOrderById(id: string, storeId: string): Promise<Order> {
         try {
             const order = await this.orderRepository.findOne({
-                where: { id, store: { id: storeId } },
+                where: { id, storeId },
                 relations: ['orderItems', 'orderItems.product']
             });
 

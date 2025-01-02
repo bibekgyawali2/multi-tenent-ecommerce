@@ -11,6 +11,7 @@ describe("E2E Service Tests", () => {
     let categoryId: string;
     let storeCreated = false;
     let subdomain: string;
+    let productId: string;
 
     const randomChars = generateRandom3Chars();
     const storeEmail = `test-store-${randomChars}@test.com`;
@@ -20,35 +21,41 @@ describe("E2E Service Tests", () => {
 
     beforeAll(() => {
         console.log("Starting E2E Tests...");
+
+
     });
 
     describe("Store and Auth Flow", () => {
         test("should create a store", async () => {
-            if (storeCreated) return; // Skip store creation if it's already done
+            if (storeCreated) {
+                return; // Skip store creation if it's already done
+            } else {
+                try {
+                    const response = await axios.post(`${BACKEND_URL}/api/store/create`, {
+                        storeName,
+                        contactEmailAddress: storeEmail,
+                        businessCategory: "fashion",
+                        contactNumber: storeContactNumber,
+                        storeAddress: `test-store-${randomChars} address`,
+                        name: storeName,
+                        email: storeEmail,
+                        phone: storeContactNumber,
+                        password: storePassword,
+                    });
 
-            try {
-                const response = await axios.post(`${BACKEND_URL}/api/store/create`, {
-                    storeName,
-                    contactEmailAddress: storeEmail,
-                    businessCategory: "fashion",
-                    contactNumber: storeContactNumber,
-                    storeAddress: `test-store-${randomChars} address`,
-                    name: storeName,
-                    email: storeEmail,
-                    phone: storeContactNumber,
-                    password: storePassword,
-                });
-
-                storeData = response.data;
-                expect(response.status).toBe(201);
-                expect(response.data).toHaveProperty("success", true);
-                expect(response.data.data).toHaveProperty("store");
-                subdomain = response.data.data.store.store.subdomain;
-                storeCreated = true;
-            } catch (e: any) {
-                console.error("Store creation failed:", e.response?.data);
-                throw e;
+                    storeData = response.data;
+                    expect(response.status).toBe(201);
+                    expect(response.data).toHaveProperty("success", true);
+                    expect(response.data.data).toHaveProperty("store");
+                    subdomain = response.data.data.store.store.subdomain;
+                    storeCreated = true;
+                } catch (e: any) {
+                    console.error("Store creation failed:", e.response?.data);
+                    throw e;
+                }
             }
+
+
         });
 
         test("should sign in with store credentials", async () => {
@@ -141,6 +148,7 @@ describe("E2E Service Tests", () => {
                 expect(response.status).toBe(201);
                 expect(response.data).toHaveProperty("success", true);
                 expect(response.data.data).toHaveProperty("product");
+                productId = response.data.data.product.id;
             } catch (e: any) {
                 console.error("Product creation failed:", e.response?.data);
                 throw e;
@@ -204,8 +212,8 @@ describe("E2E Service Tests", () => {
                         paymentAmount: 1000.00,
                         orderItems: [
                             {
-                                productId: "1",
-                                quantity: 2
+                                productId: productId,
+                                quantity: 1,
                             }
                         ]
                     },
