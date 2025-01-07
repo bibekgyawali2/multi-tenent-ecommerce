@@ -7,8 +7,26 @@ const Validate = <T extends ClassConstructor<any>>(DTO: T) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const validatorDto = async () => {
       try {
-        const objInstance = plainToClass(DTO, req.body);
-        const errors = await validate(objInstance, { whitelist: true, });
+        // Convert price and stock to numbers if they're strings
+        const body = { ...req.body };
+
+        if (typeof body.price === 'string') {
+          const price = parseFloat(body.price);
+          if (!isNaN(price)) {
+            body.price = price;
+          }
+        }
+
+        if (typeof body.stock === 'string') {
+          const stock = parseInt(body.stock, 10);
+          if (!isNaN(stock)) {
+            body.stock = stock;
+          }
+        }
+
+        const objInstance = plainToClass(DTO, body);
+        const errors = await validate(objInstance, { whitelist: true });
+
         if (errors.length) {
           const error = errors[0].constraints;
           if (error) {
@@ -16,7 +34,9 @@ const Validate = <T extends ClassConstructor<any>>(DTO: T) => {
             throw HttpException.badRequest(message);
           }
         }
-        
+
+        // Update the request body with converted values
+        req.body = body;
         next();
       } catch (error) {
         next(error);
@@ -25,6 +45,5 @@ const Validate = <T extends ClassConstructor<any>>(DTO: T) => {
     validatorDto();
   };
 };
-
 
 export default Validate;

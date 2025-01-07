@@ -26,8 +26,19 @@ class ProductRoutes {
         this.router.post(
             "/create",
             authMiddleware.getMiddleware(),
-            Validate(CreateProductDTO),
+            productController.uploadProductImage,
+            (req, res, next) => {
+                console.log(req.file);  // Log the file to ensure it's being received by Multer
+                next();
+            },
+            // Validate(CreateProductDTO),
             catchAsync(productController.createProduct.bind(productController))
+        );
+
+        this.router.get(
+            "/all",
+            authMiddleware.getMiddleware(),
+            catchAsync(productController.getAllProductAdmin.bind(productController))
         );
 
     };

@@ -19,7 +19,7 @@ class Product extends CommonEntity {
     @Column({
         name: "product_description",
     })
-    productDescription!: string;
+    description!: string;
 
     @Column({
         name: "product_image",
@@ -37,9 +37,9 @@ class Product extends CommonEntity {
     crossedPrice?: number;
 
     @Column({
-        name: "product_stock",
+        name: "stock",
     })
-    productStock!: number;
+    stock!: number;
 
     @Column({
         name: "status",

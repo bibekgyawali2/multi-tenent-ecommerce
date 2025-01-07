@@ -50,6 +50,7 @@ class AuthService {
             where: {
                 email,
             },
+            relations: ["store"]
         });
         if (!user) {
             throw HttpException.badRequest(messages["invalidAuth"]);

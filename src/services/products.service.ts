@@ -6,6 +6,8 @@ import Store from "../entities/store.entity";
 import HttpException from "../utils/HttpException";
 import { CreateProductDTO } from "../dtos/product.dto";
 import getShopIdFromUserId from "./utils/getShopIdFromUserId";
+import path from "path";
+import fs from 'fs';
 
 class ProductService {
     private productRepository: Repository<Product>;
@@ -21,11 +23,11 @@ class ProductService {
     async createProduct(productData: CreateProductDTO, userId: string): Promise<Product> {
         const {
             productName,
-            productDescription,
+            description,
             productImage,
             price,
             crossedPrice,
-            productStock,
+            stock,
             status,
             product_sku,
             categoryId,
@@ -40,12 +42,13 @@ class ProductService {
         if (!store) throw HttpException.notFound("Store not found");
 
         const product = this.productRepository.create({
+
             productName,
-            productDescription,
+            description,
             productImage,
             productPrice: price,
             crossedPrice,
-            productStock,
+            stock,
             status: status || "active",
             product_sku,
             category,
@@ -55,9 +58,6 @@ class ProductService {
         return await this.productRepository.save(product);
     }
 
-    async getAllProducts(): Promise<Product[]> {
-        return await this.productRepository.find({ relations: ["category", "store"] });
-    }
 
     async getProductById(id: string): Promise<Product> {
         const product = await this.productRepository.findOne({
@@ -75,24 +75,39 @@ class ProductService {
         });
     }
 
-    // async updateProduct(id: string, productData: Partial<CreateProductDTO>): Promise<Product> {
-    //     const product = await this.getProductById(id);
+    async getProductsByStoreAdmin(storeId: string): Promise<Product[]> {
+        return await this.productRepository.find({
+            where: { store: { id: storeId } },
+            relations: ["category", "store"],
+        });
+    }
 
-    //     if (productData.productName) product.productName = productData.productName;
-    //     if (productData.productDescription !== undefined) product.productDescription = productData.productDescription;
-    //     if (productData.productImage) product.productImage = productData.productImage;
-    //     if (productData.price !== undefined) product.productPrice = productData.price;
-    //     if (productData.crossedPrice !== undefined) product.crossedPrice = productData.crossedPrice;
-    //     if (productData.productStock !== undefined) product.productStock = productData.productStock;
-    //     if (productData.status) product.status = productData.status;
-    //     if (productData.product_sku) product.product_sku = productData.product_sku;
+    async updateProduct(id: string, productData: Partial<CreateProductDTO>): Promise<Product> {
+        const product = await this.getProductById(id);
 
-    //     return await this.productRepository.save(product);
-    // }
+        if (productData.productName) product.productName = productData.productName;
+        if (productData.description !== undefined) product.description = productData.description;
+        if (productData.productImage) product.productImage = productData.productImage;
+        if (productData.price !== undefined) product.productPrice = productData.price;
+        if (productData.crossedPrice !== undefined) product.crossedPrice = productData.crossedPrice;
+        if (productData.stock !== undefined) product.stock = productData.stock;
+        if (productData.status) product.status = productData.status;
+        if (productData.product_sku) product.product_sku = productData.product_sku;
+
+        return await this.productRepository.save(product);
+    }
 
     async deleteProduct(id: string): Promise<void> {
+
         const product = await this.getProductById(id);
         await this.productRepository.remove(product);
+    }
+
+    private async deleteProductImage(imagePath: string): Promise<void> {
+        const fullPath = path.join(process.cwd(), 'public', imagePath);
+        if (fs.existsSync(fullPath)) {
+            await fs.promises.unlink(fullPath);
+        }
     }
 }
 

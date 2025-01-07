@@ -3,5 +3,8 @@ declare namespace Express {
     user: any;
     file?: any;
     storeId?: string;
+    files?: {
+      [fieldname: string]: Express.Multer.File[];
+    } | Express.Multer.File[];
   }
 }

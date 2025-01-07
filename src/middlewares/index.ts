@@ -4,6 +4,8 @@ import morganMiddleware from "./morgan.middleware";
 import routes from "../routes/index";
 import compression from "compression";
 import cors from "cors";
+import bodyParser from "body-parser";
+
 
 const middlewares = (app: Application) => {
   app.use(compression());
@@ -12,10 +14,11 @@ const middlewares = (app: Application) => {
 
   app.use(express.json());
 
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   app.use(morganMiddleware);
 
-  app.use(express.static("public/uploads"));
+  app.use('/uploads', express.static("public/uploads"));
 
   app.use("/api", routes);
 

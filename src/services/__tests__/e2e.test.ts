@@ -21,8 +21,6 @@ describe("E2E Service Tests", () => {
 
     beforeAll(() => {
         console.log("Starting E2E Tests...");
-
-
     });
 
     describe("Store and Auth Flow", () => {

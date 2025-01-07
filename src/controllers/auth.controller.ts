@@ -38,7 +38,9 @@ class AuthController {
                 success: true,
                 message: messages["validLogin"],
                 data: {
-                    token
+                    token,
+                    subDomain: user.store.subdomain,
+                    storeId: user.store.id,
                 },
             });
         } catch (error) {
